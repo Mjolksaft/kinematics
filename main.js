@@ -1,24 +1,18 @@
-import { limb } from './modules/limb.js'
-import {vector} from './modules/vector.js'
+import Fabrik from './modules/Fabrik.js'
+import Vector from './modules/vector.js'
 
 const canvas = document.querySelector('canvas')
-const c = canvas.getContext('2d')
+const ctx = canvas.getContext('2d')
 
 canvas.width = 500
 canvas.height = 500
 
-const segment = new limb(new vector(250,250), 50, null, 0.0)
-const limbs = []
-
+let limb;
+let points = [new Vector(250, 250), new Vector(200, 250), new Vector(150, 250)]
 function setup() {
-    limbs.push(segment)
-    // for (let i = 0; i < 9; i++) {
-    //         const newSegment1 = new limb(limbs[i].endPos, 20, limbs[i], 0.01)
-    //         limbs.push(newSegment1)
-
-    // }
-    draw() 
-    addEventListener('mousemove', mouse) 
+    limb = new Fabrik(points, points[0])
+    draw()
+    // addEventListener('mousemove', mouse)
 }
 
 function mouse(event) {
@@ -26,24 +20,19 @@ function mouse(event) {
     let y = event.y
     if (x || y) {
         if (x > 0 && x < canvas.width && y > 0 && y < canvas.height) {
-            for (let i = 0; i < limbs.length; i++) {
-                limbs[i].lookAt(x,y) 
-                
-            }
+            limb.followMouse(new Vector(x, y))
         }
     }
 }
 
 function draw() {
     // redraw first frame
-    c.fillStyle = 'black'
-    c.fillRect(0,0,canvas.width, canvas.height)
-    for (let i = 0; i < limbs.length; i++) {
-        limbs[i].show(c)        
-        limbs[i].update()
-        
-    }
-    
+    ctx.fillStyle = 'white'
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+    limb.draw(ctx)
+    limb.update()
+
     requestAnimationFrame(draw)
 }
 

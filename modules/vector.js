@@ -1,65 +1,42 @@
-export class vector {
+export default class Vector {
     constructor(x, y) { 
         this.x = x
         this.y = y
 
     }
 
-    normalize() {
-        const mag = Math.sqrt(this.x**2 + this.y**2) 
-
-        if (mag == 0) {
-            return
-        }
-
-        this.x = this.x/mag
-        this.y = this.y/mag
+    static angle(v0, v1) {
+        return Math.atan2(v0.y - v1.y, v0.x - v1.x )
     }
 
-    add(term) {
-        this.x += term.x
-        this.y += term.y
-        return this
+    static sub(v0, v1) {
+        return new Vector(v0.x - v1.x, v0.y - v1.y);
     }
 
-    sub(term) {
-        this.x -= term.x
-        this.y -= term.y
+    static add(v0, v1) {
+        return new Vector(v0.x + v1.x, v0.y + v1.y);
     }
 
-    mult(factor) {
-        this.x *= factor
-        this.y *= factor
-    }
-    
-    limit(max) {
-        const mag = Math.sqrt(this.x ** 2 + this.y ** 2);
-    
-        if (mag > max) {
-            this.x /= mag;
-            this.y /= mag; // put it to one 
-    
-            this.x *= max; // make it 5 
-            this.y *= max;
-        }
-    }   
+    static norm(v) {
+        let mag = Math.sqrt(v.x**2 + v.y**2)
 
-    setRotation(angle) {
-        const newX = Math.cos(angle)
-        const newY = Math.sin(angle)
-        this.x = newX
-        this.y = newY
-        return this
+        return new Vector(v.x / mag, v.y / mag);
+
     }
 
-    getRad() {
-        return Math.atan2(this.y, this.x)
+    static scale(v, s) { 
+        return new Vector(v.x * s, v.y * s); 
     }
-    rotate(angle) {
-        const newX = this.x * Math.cos(angle) - this.y * Math.sin(angle);
-        const newY = this.x * Math.sin(angle) + this.y * Math.cos(angle);
-        this.x = newX
-        this.y = newY
-        return this
+
+    static distance (v0,v1) {
+        return Math.sqrt((v0.x -v1.x)**2 + (v0.y -v1.y)**2)
     }
+
+    static lerp(start, end, t) {
+        return new Vector(
+            start.x + (end.x - start.x) * t,
+            start.y + (end.y - start.y) * t
+        );
+    }
+
 }
